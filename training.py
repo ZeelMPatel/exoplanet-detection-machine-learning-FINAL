@@ -1,5 +1,3 @@
-####### Do not run this file; unless you wanted to train another neural network just for fun ########
-####### For demonstration purposes only #######
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
@@ -25,7 +23,7 @@ def main():
 	label[0:16] = 0
 	label[16:] = 1
 
-	# Create our train_data 
+	# Create a train_data 
 	data,Responses = shuffle(immatrix,responses, random_state=4)
 
 	train_data = [data,Responses]
@@ -55,7 +53,7 @@ def main():
 	Y_train = np_utils.to_categorical(y_train, nb_classes)
 	Y_test = np_utils.to_categorical(y_test, nb_classes)
 
-	# Defining the structure of the model, explained more in depth in the design document.
+	# Defining the structure of the model.
 	model = Sequential()
 	model.add(Conv2D(32, kernel_size=3, activation="relu", data_format="channels_first", input_shape=(1,500,500)))
 	model.add(Dropout(0.2))
@@ -65,13 +63,13 @@ def main():
 	model.add(Flatten())
 	model.add(Dense(nb_classes, activation='softmax'))
 
-	# Define our custom optimizer. Had to play with some values a bit as the training loss was diverging at first start.
+	# Define the custom optimizer. Had to play with some values a bit as the training loss was diverging at first start.
 	sgd = optimizers.SGD(lr=0.002, decay=1e-6, momentum=0.9, nesterov=False)
 
-	# Compile our model using our optimizer, a loss function for categorical classification, and accuracy metric.
+	# Compile the model using a optimizer, a loss function for categorical classification, and accuracy metric.
 	model.compile(optimizer=sgd, loss='categorical_crossentropy',metrics=['accuracy'])
 
-	# Fit our model to the data we have already split and processed, using 50 epochs due to small learning rate
+	# Fit the model to the data I have already split and processed, using 50 epochs due to small learning rate
 	model.fit(X_train, Y_train, validation_data=(X_test, Y_test), epochs=50, verbose=1)
 
 	# Just giving a last time confirmation of what the loss and accuracy is on training set.
@@ -79,7 +77,7 @@ def main():
 	# Test data still performed average at over 65% accuracy).
 	print(model.evaluate(X_train, Y_train))
 
-	# Load our weights into json and hdf5 formats
+	# Load the weights into json and hdf5 formats
 	model_json = model.to_json()
 	with open("model2.json", "w") as json_file:
 		json_file.write(model_json)
