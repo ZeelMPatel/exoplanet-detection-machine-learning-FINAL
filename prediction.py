@@ -8,7 +8,7 @@ import os
 
 
 def main():
-	# Get all images we have in our specified directory
+	# Get all images I have in the specified directory
 	imlist = os.listdir(os.getcwd() + "/inputdatarevised")
 	if '.DS_Store' in imlist:
 		imlist.remove('.DS_Store')
@@ -36,7 +36,6 @@ def main():
 	# One-hot encoding our categories 'yes' and 'no'
 	y = np_utils.to_categorical(y, 2)
 
-	# Open our stored model which was generated in our other file, now prepare it for use.
 	json_file = open('model2.json', 'r')
 	loaded_model_json = json_file.read()
 	json_file.close()
@@ -44,16 +43,16 @@ def main():
 	loaded_model = model_from_json(loaded_model_json)
 	loaded_model.load_weights("model2.h5")
 
-	# Demand a reponse from our user that corresponds to one of the images in our folder. Can add your own images to folder but it 
+	# Demand a reponse from the user that corresponds to one of the images in our folder. Can add your own images to folder but it 
 	# Is possible the data has been slightly overfitted so you might see diminishing returns (particularly if it is a noisier graph)
-	# Our program does not also extend support (as 'yes', 'no' labels given implicity in code) for additional images currently.
+	# My program does not also extend support (as 'yes', 'no' labels given implicity in code) for additional images currently.
 	while True:
 		response = input("Please input the name of the image in the given folder you would like to submit for prediction. ")
 		if response in imlist:
 			index = imlist.index(response)
 			break
 
-	# Now, our model predicts whether or not this is a lightcurve indicative of an exoplanet orbitting the star.
+	# Now, my model predicts whether or not this is a lightcurve indicative of an exoplanet orbitting the star.
 	prediction = loaded_model.predict_classes(X[index:index+1])
 	actual = np.where(y[index] == 1)[0]
 
